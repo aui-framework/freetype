@@ -159,7 +159,21 @@ else ()
 endif ()
 
 
-project(freetype C)
+project(freetype)
+
+option(FT_DISABLE_HARFBUZZ TRUE)
+option(FT_DISABLE_PNG TRUE)
+option(FT_DISABLE_BZIP2 TRUE)
+option(FT_DISABLE_BROTLI TRUE)
+
+file(
+        DOWNLOAD
+        https://raw.githubusercontent.com/aui-framework/aui/master/aui.boot.cmake
+        ${CMAKE_CURRENT_BINARY_DIR}/aui.boot.cmake)
+include(${CMAKE_CURRENT_BINARY_DIR}/aui.boot.cmake)
+
+auib_import(ZLIB https://github.com/aui-framework/zlib)
+auib_precompiled_binary()
 
 set(VERSION_MAJOR "2")
 set(VERSION_MINOR "12")
@@ -633,31 +647,3 @@ if (NOT SKIP_INSTALL_LIBRARIES AND NOT SKIP_INSTALL_ALL)
 endif ()
 
 
-# Packaging
-set(CPACK_PACKAGE_NAME ${CMAKE_PROJECT_NAME})
-set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "The FreeType font rendering library.")
-set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/README")
-set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE.TXT")
-
-set(CPACK_PACKAGE_VERSION_MAJOR ${VERSION_MAJOR})
-set(CPACK_PACKAGE_VERSION_MINOR ${VERSION_MINOR})
-set(CPACK_PACKAGE_VERSION_PATCH ${VERSION_PATCH})
-set(CPACK_PACKAGE_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
-
-if (WIN32)
-  set(CPACK_GENERATOR ZIP)
-else ()
-  set(CPACK_GENERATOR TGZ)
-endif ()
-
-set(CPACK_COMPONENT_LIBRARIES_DISPLAY_NAME "Libraries")
-set(CPACK_COMPONENT_HEADERS_DISPLAY_NAME "C/C++ Headers")
-set(CPACK_COMPONENT_LIBRARIES_DESCRIPTION
-  "Library used to build programs which use FreeType")
-set(CPACK_COMPONENT_HEADERS_DESCRIPTION
-  "C/C++ header files for use with FreeType")
-set(CPACK_COMPONENT_HEADERS_DEPENDS libraries)
-set(CPACK_COMPONENT_LIBRARIES_GROUP "Development")
-set(CPACK_COMPONENT_HEADERS_GROUP "Development")
-
-include(CPack)

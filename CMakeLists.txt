@@ -513,7 +513,7 @@ set(PKGCONFIG_LIBS "-L\${libdir} -lfreetype")
 set(PKGCONFIG_LIBS_PRIVATE "")
 
 if (ZLIB_FOUND)
-  target_link_libraries(freetype PRIVATE ${ZLIB_LIBRARIES})
+  target_link_libraries(freetype PRIVATE ZLIB::ZLIB)
   target_include_directories(freetype PRIVATE ${ZLIB_INCLUDE_DIRS})
   list(APPEND PKGCONFIG_REQUIRES_PRIVATE "zlib")
 endif ()
